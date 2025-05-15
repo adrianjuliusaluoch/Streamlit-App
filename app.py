@@ -37,6 +37,46 @@ fig = px.scatter(
     size_max=60,
 )
 
+left, middle, right = st.columns(3)
+if left.button("Download button", use_container_width=True):
+    left.markdown("You clicked the plain button.")
+    @st.cache_data
+    def get_data():
+        df = pd.DataFrame(
+            np.random.randn(50, 20), columns=("col %d" % i for i in range(20))
+        )
+        return df
+
+    @st.cache_data
+    def convert_for_download(df):
+        return df.to_csv().encode("utf-8")
+
+    df = get_data()
+    csv = convert_for_download(df)
+
+    st.download_button(
+        label="Download CSV",
+        data=csv,
+        file_name="data.csv",
+        mime="text/csv",
+        icon=":material/download:",
+    )
+
+    with open("flower.png", "rb") as file:
+        st.download_button(
+            label="Download image",
+            data=file,
+            file_name="flower.png",
+            mime="image/png",
+        )
+
+if middle.button("Emoji button", icon="😃", use_container_width=True):
+    middle.markdown("You clicked the emoji button.")
+
+
+if right.button("Material button", icon=":material/mood:", use_container_width=True):
+    right.markdown("You clicked the Material button.")
+
 tab1, tab2, tab3 = st.tabs(["Streamlit theme (default)", "Date input", "Atair Charts"])
 with tab1:
     # Use the Streamlit theme.
